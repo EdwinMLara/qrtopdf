@@ -21,28 +21,35 @@
 <script>
     var qrcode = new QRCode("qrcode");
 
+    function enviar_post(location,img_data){
+        var form = document.createElement('form');
+        form.setAttribute('method','post');
+        form.setAttribute('action',location);
+
+        var text_area = document.createElement('input');
+        text_area.setAttribute('type','hidden');
+        text_area.setAttribute('name','photo');
+        text_area.setAttribute('value',img_data);
+
+        form.appendChild(text_area);
+        document.getElementsByTagName('body')[0].appendChild(form);
+        form.submit();
+    }
+  
     function getBase64Image(img) {
-        var canvas = document.createElement("canvas");
+        var canvas = img;
         var dataURL = canvas.toDataURL("image/png");
-        console.log(dataURL);
-        return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+        return dataURL;
 
     }
     
     function tomar_imagen(){
-        var img = $("#qrcode img");
-        var img_data = getBase64Image(img[0]);
-        console.log(img_data);
-        //window.location.href = "pruebaimage.php?photo=" + img_data;
-        /*$.ajax({
-            type:"Post",
-            dataType:'json',
-            url:'pruebaimage.php',
-            data:{photo: img_data},
-            success:function(msj){
-                alert(msj.status);
-            }
-		});*/
+        var div_aux = document.getElementById("qrcode");
+        var nodes_div = div_aux.childNodes;
+        console.log(nodes_div[0]);
+        var img_data = getBase64Image(nodes_div[0]);
+        var redir = 'pruebaimage.php';
+        enviar_post(redir,img_data);
     }   
 
     function makeCode () {      
