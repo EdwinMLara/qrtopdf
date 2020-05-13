@@ -50,6 +50,22 @@
         var img_data = getBase64Image(nodes_div[0]);
         var redir = 'pruebaimage.php';
         enviar_post(redir,img_data);
+    } 
+
+    function hash_datos(text){
+        return $.ajax({
+            type:'POST',
+            url: "hash_data.php",
+            dataType: "json",
+            data:{data: text},
+            async:false,
+            success: function (response){
+                if(response.status.localeCompare("Error") == 0){
+                    alert("Error");
+                }
+            }
+        });
+
     }   
 
     function makeCode () {      
@@ -60,8 +76,10 @@
             elText.focus();
             return;
         }
-        
-       qrcode.makeCode(elText.value);
+        var hash = hash_datos(elText.value);
+        var datos = hash.responseJSON;
+        console.log("Generador: ", datos);
+        qrcode.makeCode(datos.hash);
     }
 
     $("#text").
@@ -76,7 +94,7 @@
         }
     });
 
-    makeCode();
+    //makeCode();
     
        
 </script>   
